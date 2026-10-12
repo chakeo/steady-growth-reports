@@ -3,365 +3,77 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* 布局：单列报告，移动优先；市场状态以彩色圆点标签编码 */
   :root {
-    --bg: #F4F6F8;
-    --surface: #FFFFFF;
-    --surface-2: #ECEFF3;
-    --fg: #16191F;
-    --fg-muted: #5A626E;
-    --border: #E1E5EB;
-    --accent: #1D4E89;
-    --accent-soft: #E9F0F8;
-    --good: #1F7A50;
-    --good-bg: #E6F3EC;
-    --warn: #A3720E;
-    --warn-bg: #F8EFDA;
-    --bad: #C1342B;
-    --bad-bg: #FAE9E7;
-    --font-display: 'IBM Plex Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
-    --font-body: 'IBM Plex Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --bg:#F4F6F8; --surface:#FFFFFF; --fg:#16191F; --fg-muted:#5A626E;
+    --border:#E1E5EB; --accent:#1D4E89; --accent-soft:#E9F0F8;
+    --font-display:'IBM Plex Sans','PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    --font-body:'IBM Plex Sans','PingFang SC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0E1116;
-      --surface: #161A21;
-      --surface-2: #1E242C;
-      --fg: #E8EAEE;
-      --fg-muted: #9AA3B0;
-      --border: #2A323C;
-      --accent: #8FB8E6;
-      --accent-soft: #1B2A3A;
-      --good: #58B886;
-      --good-bg: #14301F;
-      --warn: #D8AC52;
-      --warn-bg: #342710;
-      --bad: #E47A6F;
-      --bad-bg: #3A1C19;
-      color-scheme: dark;
+      --bg:#0E1116; --surface:#161A21; --fg:#E8EAEE; --fg-muted:#9AA3B0;
+      --border:#2A323C; --accent:#8FB8E6; --accent-soft:#1B2A3A; color-scheme:dark;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0E1116;
-    --surface: #161A21;
-    --surface-2: #1E242C;
-    --fg: #E8EAEE;
-    --fg-muted: #9AA3B0;
-    --border: #2A323C;
-    --accent: #8FB8E6;
-    --accent-soft: #1B2A3A;
-    --good: #58B886;
-    --good-bg: #14301F;
-    --warn: #D8AC52;
-    --warn-bg: #342710;
-    --bad: #E47A6F;
-    --bad-bg: #3A1C19;
-    color-scheme: dark;
+    --bg:#0E1116; --surface:#161A21; --fg:#E8EAEE; --fg-muted:#9AA3B0;
+    --border:#2A323C; --accent:#8FB8E6; --accent-soft:#1B2A3A; color-scheme:dark;
   }
-
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.72;
-    padding-inline: 16px;
-    padding-block: 22px 60px;
-    -webkit-font-smoothing: antialiased;
-  }
-  .page { max-width: 720px; margin: 0 auto; }
-
-  /* Masthead */
-  .masthead { padding-block: 4px 20px; }
-  .eyebrow {
-    margin: 0 0 8px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: .12em;
-    color: var(--accent);
-    text-transform: uppercase;
-  }
-  h1 {
-    margin: 0 0 10px;
-    font-family: var(--font-display);
-    font-size: 30px;
-    line-height: 1.22;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    text-wrap: balance;
-  }
-  .meta {
-    margin: 0;
-    font-size: 13px;
-    color: var(--fg-muted);
-  }
-
-  /* Section heading */
-  h2 {
-    margin: 0 0 12px;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-
-  /* Summary */
-  .summary {
-    margin-block: 8px 26px;
-    padding: 18px 18px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 10px;
-  }
-  .summary h2 { color: var(--accent); }
-  .lede { margin: 0; font-size: 15px; }
-  .em { font-weight: 600; }
-
-  /* Market card */
-  .market {
-    margin-block: 16px;
-    padding: 18px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-  }
-  .market-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
-  .market-head .flag { font-size: 18px; line-height: 1; }
-  .market-head h3 {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 600;
-  }
-
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 12.5px;
-    font-weight: 500;
-    white-space: nowrap;
-  }
-  .chip::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: currentColor;
-    flex: none;
-  }
-  .chip.good { color: var(--good); background: var(--good-bg); }
-  .chip.warn { color: var(--warn); background: var(--warn-bg); }
-  .chip.bad  { color: var(--bad);  background: var(--bad-bg); }
-
-  /* Data table */
-  .table-wrap { overflow-x: auto; margin-block: 4px 12px; }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th {
-    text-align: left;
-    padding: 8px 10px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--fg-muted);
-    border-bottom: 1px solid var(--border);
-  }
-  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  .metric { font-family: var(--font-mono); font-size: 13px; }
-  .num {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-  td .chip { font-size: 12px; padding: 1px 8px; }
-
-  .read { margin: 0 0 8px; font-size: 14.5px; color: var(--fg); }
-  .read ul { margin: 8px 0; padding-left: 18px; }
-  .read li { margin-block: 4px; }
-  .verdict {
-    margin: 4px 0 0;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border);
-    font-size: 14px;
-  }
-  .verdict strong { font-weight: 600; }
-
-  /* Strategy quote */
-  .strategy {
-    margin: 26px 0 18px;
-    padding: 20px 22px;
-    background: var(--accent-soft);
-    border-radius: 12px;
-  }
-  .strategy .label {
-    margin: 0 0 6px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: .1em;
-    color: var(--accent);
-  }
-  .strategy p { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.4; }
-
-  .closing { font-size: 14.5px; color: var(--fg); }
-
-  .disclaimer {
-    margin-top: 28px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    font-size: 12.5px;
-    color: var(--fg-muted);
-  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.72;padding-inline:16px;padding-block:22px 60px;-webkit-font-smoothing:antialiased;}
+  .page{max-width:720px;margin:0 auto;}
+  .eyebrow{margin:0 0 8px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;}
+  h1{margin:0 0 10px;font-size:28px;line-height:1.22;font-weight:700;letter-spacing:-.01em;text-wrap:balance;}
+  .meta{margin:0 0 8px;font-size:13px;color:var(--fg-muted);}
+  h2{margin:26px 0 12px;font-size:19px;font-weight:600;letter-spacing:-.01em;padding-left:12px;border-left:3px solid var(--accent);}
+  h3{margin:22px 0 10px;font-size:16px;font-weight:600;}
+  h4,h5,h6{margin:18px 0 8px;font-weight:600;}
+  p{margin:10px 0;}
+  ul,ol{margin:8px 0;padding-left:20px;}
+  li{margin-block:6px;}
+  li::marker{color:var(--accent);}
+  strong{font-weight:600;}
+  code{font-family:var(--font-mono);font-size:.9em;background:var(--accent-soft);padding:1px 5px;border-radius:4px;}
+  blockquote{margin:14px 0;padding:12px 16px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:8px;}
+  blockquote p{margin:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:24px 0;}
+  .table-wrap{overflow-x:auto;margin-block:12px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;}
+  th{text-align:left;padding:8px 12px;font-size:12px;font-weight:500;color:var(--fg-muted);border-bottom:1px solid var(--border);}
+  td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
 </style>
-
 <div class="page">
-  <header class="masthead">
-    <p class="eyebrow">稳健核心指标 · 每周配置周报</p>
-    <h1>全球大类资产配置周报</h1>
-    <p class="meta">数据截至：最新抓取 · 分析框架：ERP + 估值分位 + 实际利率交叉验证</p>
-  </header>
-
-  <section class="summary">
-    <h2>市场核心结论</h2>
-    <p class="lede">全球资产呈现<span class="em">「中国结构性低估、美国系统性高估」</span>的哑铃格局。A股与港股处于正常偏低估区间，具备左侧布局价值；美股受 Shiller PE 41.87x 与 ERP -0.48% 双重压制，需警惕利率高位下的估值收缩风险；国内债市收益率 1.68% 已进入极度低估区间，追涨性价比有限。</p>
-  </section>
-
-  <section>
-    <h2>各市场详细扫描</h2>
-
-    <article class="market">
-      <header class="market-head">
-        <span class="flag">🇨🇳</span>
-        <h3>A股</h3>
-        <span class="chip warn">中性偏低估 · 结构性机会</span>
-      </header>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td class="metric">ERP</td><td class="num">5.93%</td><td><span class="chip warn">正常 · 逼近6%低估线</span></td></tr>
-            <tr><td class="metric">沪深300估值分位</td><td class="num">58.75%</td><td><span class="chip warn">中性</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="read">ERP 5.93% 已逼近 6% 的左侧布局阈值，但估值分位 58.75% 处于中位偏上，两者轻微背离——<strong>盈利端（E）承压压低了 ERP 分子，而非估值泡沫</strong>。当前属于「估值不贵、但盈利预期偏弱」的震荡格局，不具备系统性风险，也缺乏全面牛市的估值弹性。结构上，高股息红利资产与政策催化方向（科技/内需）仍是主线。</p>
-      <p class="verdict"><strong>结论：</strong>中性，可结构性左侧布局，不宜全面加仓。</p>
-    </article>
-
-    <article class="market">
-      <header class="market-head">
-        <span class="flag">🇭🇰</span>
-        <h3>港股</h3>
-        <span class="chip warn">中性偏低估 · 等待催化</span>
-      </header>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td class="metric">恒生PE</td><td class="num">10.53x</td><td><span class="chip warn">正常 · 逼近10x低估线</span></td></tr>
-            <tr><td class="metric">恒生PB分位</td><td class="num">57.6%</td><td><span class="chip warn">中性</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="read">PE 10.53x 处于全球主要市场低位，但 PB 分位 57.6% 显示<strong>净资产回报率（ROE）偏低</strong>，即「便宜但有便宜的道理」。港股的核心矛盾在于流动性溢价缺失——受制于美元利率高位与南向资金节奏。若美国实际利率回落或国内政策超预期，港股弹性将显著大于 A 股。</p>
-      <p class="verdict"><strong>结论：</strong>中性偏低估，赔率优于 A 股，但需等待流动性催化，适合小仓位左侧埋伏。</p>
-    </article>
-
-    <article class="market">
-      <header class="market-head">
-        <span class="flag">🇺🇸</span>
-        <h3>美股</h3>
-        <span class="chip bad">系统性高估 · 风险积聚</span>
-      </header>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td class="metric">Shiller PE</td><td class="num">41.87x</td><td><span class="chip bad">高估 · 阈值35x</span></td></tr>
-            <tr><td class="metric">ERP</td><td class="num">-0.48%</td><td><span class="chip bad">高估 · 阈值&lt;1.0%</span></td></tr>
-            <tr><td class="metric">美国实际利率</td><td class="num">2.87%</td><td><span class="chip bad">高估 · 阈值&gt;2.5%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="read">三重红灯同时亮起，这是<strong>极为罕见的系统性高估信号</strong>：</p>
-      <ul class="read">
-        <li><strong>Shiller PE 41.87x</strong> 已超越 2021 年高点，接近 2000 年互联网泡沫水平；</li>
-        <li><strong>ERP -0.48%</strong> 意味着持有股票的预期回报低于无风险国债，股债性价比为负；</li>
-        <li><strong>实际利率 2.87%</strong> 处于历史高位，对高估值成长股形成持续贴现压力。</li>
-      </ul>
-      <p class="read">实际利率高企 + ERP 为负 = 估值收缩的「戴维斯双杀」条件已具备，任何盈利不及预期或利率反弹都可能触发剧烈调整。</p>
-      <p class="verdict"><strong>结论：</strong>高估预警，建议减持/对冲，严禁追高。</p>
-    </article>
-
-    <article class="market">
-      <header class="market-head">
-        <span class="flag">🇨🇳</span>
-        <h3>国内宏观 / 债市</h3>
-        <span class="chip warn">极度低估 · 追涨性价比低</span>
-      </header>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td class="metric">10年期国债收益率</td><td class="num">1.6849%</td><td><span class="chip good">低估 · 阈值&lt;1.8%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="read">收益率 1.68% 已跌破 1.8% 低估阈值，债市价格已充分甚至过度定价宽松预期，当前买入国债的<strong>票息保护极薄</strong>。但反过来看，低利率环境对 A 股高股息资产形成支撑（股息率 vs 债券收益率的剪刀差扩大）。</p>
-      <p class="verdict"><strong>结论：</strong>债市追涨性价比低，但低利率环境利好权益红利策略。</p>
-    </article>
-
-    <article class="market">
-      <header class="market-head">
-        <span class="flag">🌍</span>
-        <h3>海外利率</h3>
-        <span class="chip bad">实际利率高位 · 全球估值压制</span>
-      </header>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td class="metric">美国实际利率</td><td class="num">2.87%</td><td><span class="chip bad">高估 · 阈值&gt;2.5%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="read">实际利率 2.87% 是全球风险资产的「地心引力」——对美股是直接贴现压力，对港股是流动性抽水，对 A 股是汇率与外资流入的约束。<strong>只要实际利率维持 2.5% 以上，全球权益估值天花板就被锁定。</strong></p>
-      <p class="verdict"><strong>结论：</strong>海外利率环境对全球权益构成系统性压制，是当前最大的宏观风险源。</p>
-    </article>
-  </section>
-
-  <section>
-    <h2>资产配置行动建议</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>资产</th><th>建议动作</th><th>优先级</th></tr></thead>
-        <tbody>
-          <tr><td><span class="chip bad">美股</span></td><td>减持/对冲，严禁追高</td><td class="num">最高</td></tr>
-          <tr><td><span class="chip good">港股</span></td><td>小仓位左侧埋伏，等待催化</td><td class="num">中高</td></tr>
-          <tr><td><span class="chip warn">A股</span></td><td>结构性布局（红利+政策主线），不宜全面加仓</td><td class="num">中</td></tr>
-          <tr><td><span class="chip warn">国内债市</span></td><td>保持观望，追涨性价比低</td><td class="num">中低</td></tr>
-          <tr><td><span class="chip bad">海外利率</span></td><td>密切关注，作为全局风险开关</td><td class="num">最高</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <div class="strategy">
-    <p class="label">核心策略 · 一句话</p>
-    <p>减美股、埋港股、守A股红利、等利率拐点。</p>
-  </div>
-
-  <p class="closing">当前全球资产的核心矛盾是<strong>美国实际利率 2.87% vs 美股 ERP -0.48% 的极端背离</strong>，这一组合历史上往往以美股估值收缩收场。中国资产虽非完美，但在全球比价中具备相对优势，适合耐心左侧、分批布局，而非追涨杀跌。</p>
-
-  <p class="disclaimer">风险提示：以上分析基于量化阈值与历史规律，不构成投资建议。市场有风险，配置需动态调整。</p>
+<header>
+<p class="eyebrow">理财智能体 · 核心指标周报</p>
+<h1>全球大类资产配置周报</h1>
+<p class="meta">数据截至：2026-10-12</p>
+</header>
+<h2>一、市场核心结论摘要</h2>
+<p><strong>当前全球资产呈现“中国结构性低估、美股系统性高估”的分化格局。</strong> A股与港股处于“正常偏低估”区间，具备左侧布局价值；美股Shiller PE 41.87x已进入历史极端高估区域，需高度警惕均值回归风险。国内利率端极度宽松（10Y国债1.67%），为权益资产提供了较强的估值支撑。</p>
+<h2>二、各市场详细扫描</h2>
+<h3>🇨🇳 A股：🟡 中性偏低估，结构性机会</h3>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead><tbody><tr><td>ERP</td><td>5.92%</td><td>🟡 正常（逼近低估阈值6.0%）</td></tr><tr><td>沪深300估值分位</td><td>59.43%</td><td>🟡 正常</td></tr></tbody></table></div>
+<p><strong>解读：</strong></p>
+<ul><li>ERP 5.92%已非常接近6.0%的低估阈值，<strong>股债性价比偏向权益</strong>。</li><li>估值分位59%处于中位，尚未到极端便宜，但结合1.67%的国债收益率，<strong>权益相对债券的吸引力显著</strong>。</li><li><strong>交叉验证结论</strong>：ERP接近低估 + 估值分位中性 = <strong>“偏左侧的均衡布局区”</strong> ，不是全面低估，但结构性机会明确。</li></ul>
+<h3>🇭🇰 港股：🟡 中性，等待催化</h3>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead><tbody><tr><td>恒生指数 PE</td><td>10.57x</td><td>🟡 正常（接近低估阈值10x）</td></tr><tr><td>恒生指数 PB分位</td><td>59.07%</td><td>🟡 正常</td></tr></tbody></table></div>
+<p><strong>解读：</strong></p>
+<ul><li>PE 10.57x处于全球主要市场低位，<strong>绝对估值有安全边际</strong>。</li><li>PB分位59%说明<strong>破净修复空间已部分兑现</strong>，不再是无脑捡便宜的阶段。</li><li><strong>交叉验证结论</strong>：PE接近低估 + PB分位中性 = <strong>“估值有底、催化待等”</strong> ，适合定投或逢低吸纳，不宜追高。</li></ul>
+<h3>🇺🇸 美股：🔴 系统性高估，风险积聚</h3>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead><tbody><tr><td>Shiller PE</td><td>41.87x</td><td>🔴 高估（阈值&gt;35x）</td></tr><tr><td>ERP</td><td>暂无</td><td>--</td></tr><tr><td>实际利率</td><td>暂无</td><td>--</td></tr></tbody></table></div>
+<p><strong>解读：</strong></p>
+<ul><li>Shiller PE 41.87x已<strong>远超35x的高估阈值</strong>，处于历史极端区域（仅次于2000年互联网泡沫）。</li><li>缺少ERP和实际利率数据，无法做完整的股债性价比交叉验证，但<strong>单看估值已构成明确的预警信号</strong>。</li><li><strong>交叉验证结论</strong>：估值极端高估 + 关键数据缺失 = <strong>“风险大于机会，防范回撤优先”</strong> 。</li></ul>
+<h3>🇨🇳 国内宏观/利率：🟢 极度宽松，利好权益</h3>
+<div class="table-wrap"><table><thead><tr><th>指标</th><th>数值</th><th>状态</th></tr></thead><tbody><tr><td>10年期国债收益率</td><td>1.6722%</td><td>🟢 低估（阈值&lt;1.8%）</td></tr></tbody></table></div>
+<p><strong>解读：</strong></p>
+<ul><li>国债收益率1.67%处于<strong>历史极低水平</strong>，反映货币政策极度宽松、经济复苏预期偏弱。</li><li><strong>对权益的传导</strong>：低利率环境压制债券回报，<strong>推升权益ERP</strong>，为A股/港股提供估值底部支撑。</li><li><strong>风险提示</strong>：若利率持续下行，可能反映通缩压力，需关注企业盈利端能否接力。</li></ul>
+<h3>🌍 海外利率：⚪ 数据缺失，无法判断</h3>
+<ul><li>美国实际利率数据暂缺，无法评估全球流动性对风险资产的压制程度。</li><li><strong>建议</strong>：密切关注后续数据更新，实际利率若&gt;2.5%将对美股和新兴市场构成额外压力。</li></ul>
+<h2>三、资产配置行动建议</h2>
+<div class="table-wrap"><table><thead><tr><th>资产类别</th><th>建议动作</th><th>优先级</th></tr></thead><tbody><tr><td><strong>A股</strong></td><td>🟢 <strong>左侧分批加仓</strong></td><td>⭐⭐⭐⭐</td></tr><tr><td><strong>港股</strong></td><td>🟢 <strong>定投/逢低吸纳</strong></td><td>⭐⭐⭐⭐</td></tr><tr><td><strong>美股</strong></td><td>🔴 <strong>注意防范风险，减仓或对冲</strong></td><td>⭐⭐⭐⭐⭐</td></tr><tr><td><strong>国内债券</strong></td><td>🟡 <strong>保持观望，久期不宜过长</strong></td><td>⭐⭐⭐</td></tr><tr><td><strong>海外利率</strong></td><td>⚪ <strong>数据缺失，暂不操作</strong></td><td>--</td></tr></tbody></table></div>
+<p><strong>具体策略：</strong></p>
+<ol><li><strong>A股</strong>：ERP逼近6% + 利率极低，<strong>建议左侧分批加仓</strong>，优先配置高股息红利资产和低估值蓝筹。</li><li><strong>港股</strong>：PE接近10x + PB分位中性，<strong>建议定投或逢低吸纳</strong>，关注互联网和消费板块的估值修复。</li><li><strong>美股</strong>：Shiller PE 41.87x极端高估，<strong>建议减仓或增加对冲</strong>，防范均值回归带来的系统性回撤。</li><li><strong>国内债券</strong>：利率已至极低，<strong>保持观望</strong>，久期不宜过长，警惕利率反弹风险。</li><li><strong>整体组合</strong>：<strong>“超配中国权益、低配美股、中性债券”</strong> ，等待海外利率数据更新后再做动态调整。</li></ol>
+<blockquote><p>⚠️ <strong>风险提示</strong>：以上分析基于当前数据，市场存在不确定性。美股高估不代表立即下跌，A股低估不代表立即上涨。建议结合自身风险承受能力，动态调整仓位。</p></blockquote>
 </div>
